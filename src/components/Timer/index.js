@@ -1,47 +1,25 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, StatusBar } from "react-native";
-import Button from "../Button";
+// put everything related to redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators as tomatoActions } from '../../reducer';
+import Timer from './presenter';
 
-class Timer extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar hidden={true} />
-        <View style={styles.upperView}>
-            <Text style={styles.time}>5:00 PM</Text>
-        </View>
-
-        <View style={styles.lowerView}>
-            <Button iconName="play-circle" onPress={() => alert("it works")} />
-            <Button iconName="stop-circle" onPress={() => alert("it works")} />
-        </View>
-      </View>
-    );
+const mapStateToProps = (state) => {
+  const { isPlaying, elapsedTime, timerDuration } = state;
+  return {
+    isPlaying,
+    elapsedTime,
+    timerDuration
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "brown"
-  },
-  upperView: {
-    flex: 2,
-    justifyContent: "center",
-    alignItems: "center"
+const mapDispatchToProps = (dispatch) => {
+  return {
+    startTimer: bindActionCreators(tomatoActions.startTimer, dispatch),
+    restartTimer: bindActionCreators(tomatoActions.restartTimer, dispatch),
+    addSecond: bindActionCreators(tomatoActions.addSecond, dispatch)
 
-  },
-  lowerView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  time: {
-      color: "white",
-      fontSize: 70,
-      fontWeight: "100"
-  }
-});
+  };
+}
 
-export default Timer; 
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);
